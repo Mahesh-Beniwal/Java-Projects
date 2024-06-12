@@ -17,8 +17,10 @@ public class Buses {
 	String fuelType; // 'CNG' OR 'PETRROL' OR 'DIESEL' OR 'ELECTRIC'
 	String driverName;
 	double prize;
+	int earning;
+	Capacity C;
 	
-	
+//	--------------------------------------------------------------------------------------------------------------
 	
 	public Buses(int busNumber , String dateBooked , String source , String destination , String driverName , String type , String fuelType , double prize){
 		this.busNumber = busNumber;
@@ -62,15 +64,27 @@ public class Buses {
 			statement.setString(8, driverName);
 			// Till here the First Query is ready to Execute.
 			
-			
-			
-			
+			if(statement.executeUpdate() > 0) return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+//	--------------------------------------------------------------------------------------------------------------
+	
+	public void getbusDetails() {
+		System.out.println("|-----------------------|-------------------------|");
+		System.out.println("|       Bus Number      |          "+busNumber+"           |");
+		System.out.println("|       Date            |          "+dateBooked+"  |");
+		System.out.println("|       Starting        |          "+source+"    |");
+		System.out.println("|       Destination     |          "+destination+ "    |");
+		System.out.println("|       Type            |          "+type+"    |");
+		System.out.println("|       Ticket Prize    |          "+prize+"    |") ;
+		System.out.println("|       Driver          |          "+driverName+"    |");
+		System.out.println("|-----------------------|-------------------------|");
 	}
 	
 }

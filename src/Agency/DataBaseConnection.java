@@ -9,6 +9,8 @@ public class DataBaseConnection {
 	private static final String username = "root";
 	private static final String password = "123456";
 	
+//	--------------------------------------------------------------------------------------------------------------
+	
 	public Connection getconnection() {
 		try {
 			Connection c = DriverManager.getConnection(url, username, password);
@@ -20,4 +22,6 @@ public class DataBaseConnection {
 			return null;
 		}
 	}
+//	--------------------------------------------------------------------------------------------------------------
+	
 }
