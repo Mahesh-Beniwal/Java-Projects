@@ -12,12 +12,17 @@ public class DataBaseConnection {
 //	--------------------------------------------------------------------------------------------------------------
 	
 	public Connection getconnection() {
+		try{
+			Class.forName("com.mysql.cj.jdbc.Driver");	// Here we add the program which is going to use in the program.
+		}catch(ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 		try {
 			Connection c = DriverManager.getConnection(url, username, password);
 			System.out.println("Connection Created");
 			return c;
 		} catch (SQLException e) {
-			System.err.println("Connection not created!!");
+			System.err.println("Connection can't Established!!");
 			e.printStackTrace();
 			return null;
 		}

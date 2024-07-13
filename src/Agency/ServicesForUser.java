@@ -7,7 +7,7 @@ public interface ServicesForUser {
 	public boolean checkSeatAvailability (int seatNumber , int busNumber );
 	public int showTicketPrize(int busNumber);
 	public int showTicketPrize(String source , String destination);
-	public boolean bookTicket(String source , String destination);
-	private boolean bookTicket(String source , String destination,int seatNumber);
+	public boolean bookTicket(String source , String destination , String date);
+	public boolean bookTicket(String source , String destination,int seatNumber, String date);
 	
 }

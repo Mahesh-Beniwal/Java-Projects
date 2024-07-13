@@ -23,16 +23,14 @@ public class CommonServices {
 					Date date = output.getDate("LEAVING_DATE");
 					String LeavingDate = date.toString();
 					System.out.println("|-----------------|---------------------|");
-					for(int i = 0 ; i < 4 ; i++) {
-						System.out.println("|     Bus No      |"+busNumber+"                 |");
-						System.out.println("|-----------------|---------------------|");
-						System.out.println("|     Driver name |"+driverName+"               |");
-						System.out.println("|-----------------|---------------------|");
-						System.out.println("|	  Prize       |"+ticketPrize+"                 |");
-						System.out.println("|-----------------|---------------------|");
-						System.out.println("|     Date        |"+LeavingDate+"           |");
-						System.out.println("|-----------------|---------------------|");
-					}
+					System.out.println("|     Bus No      |"+busNumber+"                 |");
+					System.out.println("|-----------------|---------------------|");
+					System.out.println("|     Driver name |"+driverName+"               |");
+					System.out.println("|-----------------|---------------------|");
+					System.out.println("|	 Prize       |"+ticketPrize+"                 |");
+					System.out.println("|-----------------|---------------------|");
+					System.out.println("|     Date        |"+LeavingDate+"           |");
+					System.out.println("|-----------------|---------------------|");
 					return true;	
 				}
 			} catch (SQLException e) {
@@ -50,7 +48,7 @@ public class CommonServices {
 			String query = "SELECT COUNT(*) FROM CAPACITY WHERE BUS_NO = ? AND AVAILABLE = ?";
 			PreparedStatement statement = conn.prepareStatement(query);
 			statement.setInt(1, busNumber);
-			statement.setBoolean(2, false);
+			statement.setBoolean(2, true);
 			ResultSet output = statement.executeQuery();
 			if(output.next())
 				System.out.println("The number of seat Available are :  " + output.getInt(1));
@@ -66,15 +64,16 @@ public class CommonServices {
 		int BusCapacity = 30;
 		if(seatNumber < 1 || seatNumber > BusCapacity ) return false;
 		Connection conn = new DataBaseConnection().getconnection();
-		String query = "SELECT AVAILABLE FOR CAPACITY WHERE BUS_NO = ? AND SEAT_NO = ?";
+		String query = "SELECT AVAILABLE from CAPACITY WHERE BUS_NO = ? AND SEAT_NO = ?";
 		
 		try {
 			PreparedStatement statement = conn.prepareStatement(query);
 			statement.setInt(1, busNumber);
 			statement.setInt(2, seatNumber);
 			ResultSet Output = statement.executeQuery();
-			Output.next();
+			if(Output.next())
 			return Output.getBoolean("AVAILABLE");
+			else return false;
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
@@ -86,7 +85,7 @@ public class CommonServices {
 	
 	public void ShowSeatsOfthebus(int busNumber) {
 		Connection conn = new DataBaseConnection().getconnection();
-		String query = "SELECT AVAILABLE FOR CAPACITY WHERE BUS_NO = ? ORDER BY SEAT_NO";
+		String query = "SELECT AVAILABLE , SEAT_NO from CAPACITY WHERE BUS_NO = ? ORDER BY SEAT_NO";
 		
 		try {
 			PreparedStatement statement = conn.prepareStatement(query);
@@ -96,17 +95,18 @@ public class CommonServices {
 			int i = 1;
 			while(Output.next()) {
 				boolean status = Output.getBoolean("AVAILABLE");
-				if(status) {
-					if(i < 10)
-					System.out.println("| Seat No :  "+i+"      |         Already Booked          |");
+				int seatNumber = Output.getInt("SEAT_NO");
+				if(!status) {
+					if(seatNumber < 10)
+					System.out.println("| Seat No :  "+seatNumber+"      |         Already Booked          |");
 					else
-					System.out.println("| Seat No : "+i+"      |         Already Booked          |");
+					System.out.println("| Seat No : "+seatNumber+"      |         Already Booked          |");
 				}
 				else {
-					if(i<10)
-					System.out.println("| Seat No :  "+i+"      |            Available            |");
+					if(seatNumber<10)
+					System.out.println("| Seat No :  "+seatNumber+"      |            Available            |");
 					else
-					System.out.println("| Seat No : "+i+"      |            Available            |");
+					System.out.println("| Seat No : "+seatNumber+"      |            Available            |");
 					
 				}
 			System.out.println("|-------------------------------------------------------|" );	
@@ -116,6 +116,35 @@ public class CommonServices {
 			System.err.println("There is some Issue Please try again !!!");
 			e.printStackTrace();
 		}
+	}
+
+	
+	public void InformationOfBuses() {
+		Connection conn = new DataBaseConnection().getconnection();
+		try {
+			String query = "Select * from buses";
+			PreparedStatement statement = conn.prepareStatement(query); 
+			
+			ResultSet result = statement.executeQuery();
+			while(result.next()) {
+				Buses B = new Buses();
+				B.busNumber = result.getInt("Bus_No");
+				B.source  = result.getString("Source");
+				B.destination = result.getString("Destination");
+				B.type = result.getString("TYpe");
+				B.fuelType = result.getString("Fuel_Type");
+				B.driverName = result.getString("Driver_name");
+				B.dateBooked = result.getDate("Leaving_date").toString();
+				B.prize = result.getInt("Ticket_Prize");
+//				B.earning = result.getInt("Earning");
+				B.getbusDetails();
+				
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 //	--------------------------------------------------------------------------------------------------------------

@@ -6,7 +6,7 @@ public interface ServicesForOwner {
 	public void NumberOfSeatLeft(int busNumber);
 	public double TotalSaleOnDate(String date);
 	public String DriverName(int BusNo);
-	public int getBusNumber(String driverName);
+//	public int getBusNumber(String driverName);
 	public void InformationOfBuses();
 	public boolean isAgency(String source);
 	public boolean createAgency(String location , String managerName);
